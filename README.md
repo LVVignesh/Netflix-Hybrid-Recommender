@@ -1,61 +1,115 @@
-# 🎬 Netflix Hybrid Recommendation Engine
+# 🎬 Netflix Hybrid Recommendation Engine (ML-Based)
 
-### **Overview**
-This project implements a **Collaborative Filtering** recommendation system utilizing **Matrix Factorization (SVD)**. It is designed to handle the "cold start" problem by simulating user interactions through implicit feedback—specifically combining item popularity, release year, and runtime to generate behavioral signals.
+## 📌 Project Overview
+This project implements a **Hybrid Recommendation System** for Netflix-style content using classical Machine Learning techniques. It demonstrates the transition from raw metadata to behavioral intelligence by combining **Collaborative Filtering**, **Matrix Factorization (SVD)**, and **Latent Feature Discovery**.
 
-This repository serves as a professional demonstration of information retrieval, dimensionality reduction, and rank-based evaluation metrics within a production-style machine learning pipeline.
-
-
+The core objective of this project is to simulate how real-world production systems (like Netflix or Spotify) identify hidden relationships between users and items using a "Candidate Generation" and "Ranking" logic, without relying on heavy deep learning frameworks.
 
 ---
 
-### **🚀 Core Architecture**
+## 🧠 The Hybrid Logic: Why This Approach?
+Unlike simple content-based filtering, this system is a **Hybrid** because it bridges the gap between metadata and behavior:
+* **Discovery (Unsupervised):** Uses **Truncated SVD** to break down a sparse user-item matrix into latent factors, discovering hidden themes (e.g., "Gritty Korean Crime Thrillers") that aren't explicitly labeled.
+* **Ranking (Performance):** Engineers a **Popularity/Quality Signal** based on release year and runtime to rank the most relevant "hits" for a specific user.
 
-#### **1. Implicit Feedback Simulation**
-* Generates a synthetic user-item interaction matrix for 100 users.
-* Engineers a "popularity" score by ranking items based on release year and runtime, serving as a proxy for user preference in the absence of explicit rating data.
-
-#### **2. Dimensionality Reduction (Truncated SVD)**
-* Reduces a sparse user-item matrix of 3,599 titles into **30 Latent Factors**.
-* Captures approximately **36.1% of the total variance**, identifying hidden relationships between content types (e.g., genre patterns, thematic similarities).
-
-#### **3. Similarity Engine**
-* Computes a **Cosine Similarity** matrix across movie latent factors.
-* Enables real-time retrieval of the top-K similar items based on behavioral patterns rather than just metadata.
+This architecture effectively addresses the **Cold Start problem** by using content signals to generate recommendations even when explicit user rating data is limited.
 
 ---
 
-### **📊 Performance Evaluation**
-Recommendation systems require rank-aware metrics rather than standard accuracy. This project evaluates performance using **Precision@K** and **Recall@K** to measure the relevance of the top-10 suggested items.
+## 🏗️ Project Architecture
 
-* **Precision@10: 0.397** — Approximately 40% of the top-10 recommendations matched items in the simulated users' watch history.
-* **Recall@10: 0.033** — Measures the proportion of total relevant items successfully captured within a constrained top-10 list.
-* **Variance Explained: 0.361** — Indicates the efficiency of the Truncated SVD in preserving information while reducing dimensionality.
+```text
+Data Loading (netflix.csv)
+   ↓
+Feature Engineering (Runtime normalization & Popularity Scaling)
+   ↓
+Interaction Simulation (Synthetic User-Item Matrix)
+   ↓
+Matrix Factorization (Truncated SVD)
+   ↓
+Latent Feature Learning (30 Components)
+   ↓
+Cosine Similarity (Item-to-Item Mapping)
+   ↓
+Evaluation (Precision@K, Recall@K)
+
+🚀 Key Features
+
+User–Item Interaction Matrix: Simulated implicit feedback loop for 100 users.
+Latent Factor Discovery: Decomposition of 3,599 titles into 30 dense feature vectors.
+Variance Capture: Successfully captures ~36% of data structure through dimensionality reduction.
+Rank-Based Metrics: Implementation of industry-standard Precision and Recall at K ($K=10$).
+
+Metric,Score,Description
+Precision@10,0.397,~40% of the top-10 recommendations were relevant to the user.
+Recall@10,0.033,The proportion of total relevant items captured in the top-10.
+Variance Explained,0.361,The amount of interaction structure captured by SVD components.
+
+
+🛠️ Technical Stack
+
+Language: Python 3.12+
+
+Data Analysis: Pandas, NumPy
+
+Machine Learning: Scikit-Learn
+
+TruncatedSVD (Matrix Factorization)
+
+MinMaxScaler (Feature Scaling)
+
+cosine_similarity (Vector Space Mapping)
 
 
 
----
+🧪 Sample Recommendation Output
 
-### **🛠️ Technical Stack**
-* **Language:** Python 3.12+
-* **Data Manipulation:** Pandas, NumPy
-* **Machine Learning:** Scikit-Learn
-    * `TruncatedSVD`: Matrix Factorization
-    * `MinMaxScaler`: Feature Scaling
-    * `cosine_similarity`: Similarity Mapping
+Input: #Alive (Korean Thriller)
 
----
+Output:
 
-### **📂 Project Structure**
-* `netflix_recommendation_system.py`: Master script containing the pipeline from data cleaning to evaluation.
-* `netflix.csv`: Raw dataset containing movie metadata (title, type, runtime, etc.).
-* `.gitignore`: Python-specific exclusion rules.
-* `README.md`: Project documentation.
+Hey Arnold! The Jungle Movie
 
----
+Night in Paradise (Korean Crime/Thriller)
 
-### **🚀 How to Run**
-1. Ensure `netflix.csv` is in the root directory.
-2. Install dependencies: 
-   ```bash
-   pip install pandas numpy scikit-learn
+Dovlatov
+
+Todd Glass: Act Happy
+
+Long Story Short
+
+Note: The system correctly identified 'Night in Paradise' as a behavioral match to '#Alive' through latent factor similarity.
+
+📂 Project Structure
+
+Netflix Recommendation system.py: The full ML pipeline script.
+
+netflix.csv: Raw metadata for movies and shows.
+
+.gitignore: Standard Python exclusions.
+
+README.md: Project documentation.
+
+🧑‍💻 How to Run
+
+Clone the repository:git clone [https://github.com/LVVignesh/Netflix-Hybrid-Recommender.git](https://github.com/LVVignesh/Netflix-Hybrid-Recommender.git)
+
+Install dependencies:
+
+Bash
+pip install pandas numpy scikit-learn
+Run the engine:
+
+Bash
+python "Netflix Recommendation system.py"
+
+FUTURE ENHANCEMENTS
+
+Neural Collaborative Filtering: Replacing SVD with Embedding layers.
+
+Hybrid Deep Learning: Using Autoencoders to reconstruct missing ratings.
+
+Explainable AI (XAI): Integrating SHAP to explain why a specific movie was recommended.
+
+
+Author: Vignesh LV
